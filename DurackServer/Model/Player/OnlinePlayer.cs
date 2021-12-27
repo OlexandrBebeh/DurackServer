@@ -14,7 +14,6 @@ namespace DurackServer.Model
 
         public override List<CardType> UseCards()
         {
-            
             throw new NotImplementedException();
         }
 
