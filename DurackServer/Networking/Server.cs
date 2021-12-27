@@ -34,7 +34,7 @@ namespace DurackServer.networking
         private void HandleClient(TcpClient client)
         {
             var player = new NetworkPlayer(client);
-            GameSession session;
+            GameSession? session;
             while (true)
             {
                 try
@@ -58,10 +58,6 @@ namespace DurackServer.networking
                             Console.WriteLine($"Created Session: {session.Guid}");
                             player.SendMessageToClient($"{session.Guid}");
                             break;
-                        
-                        case CommandCodes.PutCard:
-                            break;
-                        
                     }
                 }
                 catch (Exception e)
