@@ -73,6 +73,9 @@ namespace DurackServer.networking
                             break;
                         
                         case CommandCodes.ThrowCards:
+                        case CommandCodes.Pass:
+                        case CommandCodes.BeatCards:
+                        case CommandCodes.TakeCards:
                             session = SessionManager.GetFirstSession();
                             if (session is not null)
                             {
