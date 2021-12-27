@@ -16,7 +16,7 @@ namespace DurackServer.Model.Game
             gameState.deckType = new DeckType();
         }
 
-        public DeckType GetGeck()
+        public DeckType GetDeck()
         {
             return gameState.deckType;
         }

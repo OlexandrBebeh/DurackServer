@@ -7,4 +7,19 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Content Include="obj\Debug\net6.0\DurackServer.AssemblyInfoInputs.cache" />
+      <Content Include="obj\Debug\net6.0\DurackServer.assets.cache" />
+      <Content Include="obj\Debug\net6.0\DurackServer.csproj.AssemblyReference.cache" />
+      <Content Include="obj\Debug\net6.0\DurackServer.GeneratedMSBuildEditorConfig.editorconfig" />
+      <Content Include="obj\DurackServer.csproj.nuget.dgspec.json" />
+      <Content Include="obj\project.assets.json" />
+      <Content Include="obj\project.nuget.cache" />
+      <Content Include="obj\project.packagespec.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs" />
+    </ItemGroup>
+
 </Project>

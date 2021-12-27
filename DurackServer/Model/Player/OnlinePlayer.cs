@@ -7,6 +7,8 @@ namespace DurackServer.Model
 {
     public class OnlinePlayer : Player
     {
+        private List<CardType> cardsToUse;
+        private PlayerAction action;
         public override PlayerAction GetAction()
         {
             return PlayerAction.Pass;
@@ -14,12 +16,22 @@ namespace DurackServer.Model
 
         public override List<CardType> UseCards()
         {
-            throw new NotImplementedException();
+            return cardsToUse;
         }
 
         public override void TakeCards(List<CardType> cards)
         {
-            throw new NotImplementedException();
+            hand.AddRange(cards);
+        }
+
+        public override void SetCardsToUse(List<CardType> cards)
+        {
+            cardsToUse = cards;
+        }
+
+        public override void SetAction(PlayerAction _action)
+        {
+            action = _action;
         }
     }
 }

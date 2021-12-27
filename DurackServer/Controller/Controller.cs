@@ -1,31 +1,32 @@
 using DurackServer.Exceptions;
 using DurackServer.Model.Game;
+using DurackServer.networking;
 
 namespace DurackServer.Controller
 {
     public class Controller
     {
         private Game game;
-        public void StartGame()
+        
+        public void StartGameRound()
         {
-            while (true)
+            int player = game.GetCurrentPlayerId();
+            try
             {
-                int player = game.GetCurrentPlayerId();
-                try
-                {
-                    game.StartTransaction();
-                    var action = game.GetPlayer(player).GetAction();
-                    ProcessAction(action);
-                }
-                catch (GameException e)
-                {
-                    game.UndoTransaction();
-                }
+                game.StartTransaction();
+                
+                var action = game.GetPlayer(player).GetAction();
+                ProcessAction(action);
+            }
+            catch (GameException e)
+            {
+                game.UndoTransaction();
+                throw new GameException("make another move -_-");
+            }
 
-                if (game.CheckWin() > -1)
-                {
-                    break;
-                }
+            if (game.CheckWin() > -1)
+            {
+                throw new GameException("Game end, someone win(?)");
             }
         }
 

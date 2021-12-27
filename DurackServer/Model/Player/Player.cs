@@ -21,6 +21,10 @@ namespace DurackServer.Model
         abstract public List<CardType> UseCards();
         
         abstract public void TakeCards(List<CardType> cards);
+        
+        abstract public void SetCardsToUse(List<CardType> cards);
+
+        abstract public void SetAction(PlayerAction action);
 
     }
 }

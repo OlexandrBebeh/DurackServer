@@ -12,7 +12,6 @@ namespace DurackServer.networking
     {
         private TcpListener _listener = new(IPAddress.Parse("127.0.0.1"), 8001);
         private SessionManager SessionManager = new();
-        private Game _game;
         public void Start()
         {
             try
@@ -50,7 +49,6 @@ namespace DurackServer.networking
                             {
                                 SessionManager.AddPlayerToSession(session, player);
                                 Console.WriteLine($"Connected to Session: {session.Guid}");
-                                _game = new Game();
                                 return;
                             }
                             session = SessionManager.CreateSession(cmd.Name);
