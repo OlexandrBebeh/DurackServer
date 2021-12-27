@@ -12,6 +12,9 @@ namespace DurackServer.networking
     {
         private TcpListener _listener = new(IPAddress.Parse("127.0.0.1"), 8001);
         private SessionManager SessionManager = new();
+        public delegate void PutCard(GameSession currentPlayer, Command cmd);
+        public event PutCard OnPutCard;
+        
         public void Start()
         {
             try
@@ -55,6 +58,14 @@ namespace DurackServer.networking
                             SessionManager.AddPlayerToSession(session, player);
                             Console.WriteLine($"Created Session: {session.Guid}");
                             player.SendMessageToClient($"{session.Guid}");
+                            break;
+                        
+                        case CommandCodes.PutCard:
+                            session = SessionManager.GetFirstSession();
+                            if (session is not null)
+                            {
+                                OnPutCard?.Invoke(session,cmd);
+                            }
                             break;
                     }
                 }
