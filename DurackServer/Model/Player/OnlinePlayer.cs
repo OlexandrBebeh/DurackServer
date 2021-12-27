@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DurackServer.Model.DataType;
 using DurackServer.Model.Game;
+using DurackServer.networking.PlayerIO;
 
 namespace DurackServer.Model
 {
@@ -9,9 +10,16 @@ namespace DurackServer.Model
     {
         private List<CardType> cardsToUse;
         private PlayerAction action;
-        public override PlayerAction GetAction()
+        public override PlayerAction GetAction(Command cmd)
         {
-            return PlayerAction.Pass;
+            return cmd.Code switch
+            {
+                CommandCodes.ThrowCards => PlayerAction.ThrowCards,
+                CommandCodes.BeatCards => PlayerAction.BeatCards,
+                CommandCodes.TakeCards => PlayerAction.TakeCards,
+                CommandCodes.Pass => PlayerAction.Pass,
+                _ => throw new Exception("Invalid cmd code")
+            };
         }
 
         public override List<CardType> UseCards()

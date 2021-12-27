@@ -1,22 +1,25 @@
 using DurackServer.Exceptions;
+using DurackServer.Model;
 using DurackServer.Model.Game;
 using DurackServer.networking;
+using DurackServer.networking.PlayerIO;
+using DurackServer.networking.Session;
 
 namespace DurackServer.Controller
 {
     public class Controller
     {
-        private Game game;
+        private Game game = new();
         
-        public void StartGameRound()
+        public void StartGameRound(GameSession session, Command cmd)
         {
-            int player = game.GetCurrentPlayerId();
+            var playerId = game.GetCurrentPlayerId();
             try
             {
                 game.StartTransaction();
-                
-                var action = game.GetPlayer(player).GetAction();
-                ProcessAction(action);
+                var curPlayer = game.GetPlayer(playerId);
+                var action = curPlayer.GetAction(cmd);
+                ProcessAction(action, cmd);
             }
             catch (GameException e)
             {
@@ -30,7 +33,13 @@ namespace DurackServer.Controller
             }
         }
 
-        private void ProcessAction(PlayerAction action)
+        public void AddPlayer(Player player)
+        {
+            game.gameState.players.Add(player);
+            game.PostRaund();
+        }
+
+        private void ProcessAction(PlayerAction action, Command cmd)
         {
             if (action == PlayerAction.Pass)
             {
@@ -47,14 +56,21 @@ namespace DurackServer.Controller
             }
             else if (action == PlayerAction.ThrowCards)
             {
+                game.GetPlayer(game.GetCurrentPlayerId()).SetCardsToUse(cmd.Cards);
                 game.PutCards(game.GetPlayer(game.GetCurrentPlayerId()).UseCards());
                 game.NextPlayer();
             }
             else if (action == PlayerAction.BeatCards)
             {
+                game.GetPlayer(game.GetCurrentPlayerId()).SetCardsToUse(cmd.Cards);
                 game.BeatCards(game.GetPlayer(game.GetCurrentPlayerId()).UseCards());
                 game.NextPlayer();
             }
+        }
+
+        public GameState GetGameState()
+        {
+            return game.gameState;
         }
     }
 }

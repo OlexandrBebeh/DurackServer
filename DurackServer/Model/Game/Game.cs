@@ -62,10 +62,10 @@ namespace DurackServer.Model.Game
             
             if (gameState.allowedRanks.Count == 0)
             {
-                gameState.allowedRanks.Add(cards[0].rank);
+                gameState.allowedRanks.Add(cards[0].Rank);
             }
             
-            if (cards.TrueForAll(x => gameState.allowedRanks.Contains(x.rank)))
+            if (cards.TrueForAll(x => gameState.allowedRanks.Contains(x.Rank)))
             {
                 CreateCardForAttack(cards);
             }
@@ -118,7 +118,7 @@ namespace DurackServer.Model.Game
         {
             foreach (var card in cards)
             {
-                gameState.allowedRanks.Add(card.rank);
+                gameState.allowedRanks.Add(card.Rank);
                 gameState.fieldState.Add(new CardCouplet(card));
             }
         }
@@ -171,7 +171,7 @@ namespace DurackServer.Model.Game
             {
                 var cardAmount = Math.Min(
                     gameState.deckType.GetCardsAmount(),
-                    CardsInHand - GetPlayer(GetNextPlayerId()).hand.Count);
+                    CardsInHand - GetPlayer((GetCurrentPlayerId() + i) % gameState.players.Count).hand.Count);
                 
                 GetPlayer((GetCurrentPlayerId() + i) % gameState.players.Count)
                     .hand.AddRange(gameState.deckType.RemoveNTop(cardAmount));

@@ -2,13 +2,13 @@ namespace DurackServer.Model.DataType
 {
     public class CardType
     {
-        public Rank rank;
-        public Suit suit;
+        public Rank Rank { get; set; }
+        public Suit Suit { get; set; }
 
-        public CardType(Rank _rank, Suit _suit)
+        public CardType(Rank rank, Suit suit)
         {
-            rank = _rank;
-            suit = _suit;
+            Rank = rank;
+            Suit = suit;
         }
         
         

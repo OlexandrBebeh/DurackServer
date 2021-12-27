@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DurackServer.Model.DataType;
 using DurackServer.Model.Game;
+using DurackServer.networking.PlayerIO;
 
 namespace DurackServer.Model
 {
@@ -10,13 +11,13 @@ namespace DurackServer.Model
         private int id;
         private String name;
 
-        public List<CardType> hand;
+        public List<CardType> hand = new();
         
         public bool HasCards()
         {
             return hand.Count > 0;
         }
-        abstract public PlayerAction GetAction();
+        abstract public PlayerAction GetAction(Command cmd);
 
         abstract public List<CardType> UseCards();
         

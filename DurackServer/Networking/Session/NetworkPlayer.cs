@@ -1,5 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using DurackServer.networking.PlayerIO;
 
 namespace DurackServer.networking.Session
 {
@@ -27,8 +29,9 @@ namespace DurackServer.networking.Session
             return builder.ToString();
         }
 
-        public void SendMessageToClient(string msg)
+        public void SendMessageToClient(Command cmd)
         {
+            var msg = JsonSerializer.Serialize(cmd);
             Client.GetStream().Write(Encoding.Unicode.GetBytes(msg));
         }
 

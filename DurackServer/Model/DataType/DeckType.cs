@@ -28,7 +28,7 @@ namespace DurackServer.Model.DataType
 
             bottomCard = deck[deck.Count - 1];
 
-            trump = bottomCard.suit;
+            trump = bottomCard.Suit;
         }
 
         public Suit GetTrump()
@@ -72,16 +72,16 @@ namespace DurackServer.Model.DataType
         
         public bool TryBeat(CardType first, CardType second)
         {
-            if (first.suit == second.suit)
+            if (first.Suit == second.Suit)
             {
-                return first.rank < second.rank;
+                return first.Rank < second.Rank;
             }
 
-            if (second.suit == GetTrump())
+            if (second.Suit == GetTrump())
             {
-                if (first.suit == GetTrump())
+                if (first.Suit == GetTrump())
                 {
-                    return first.rank < second.rank;
+                    return first.Rank < second.Rank;
                 }
                 return true;
             }

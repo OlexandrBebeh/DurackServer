@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using DurackServer.Model.Game;
 using DurackServer.networking.PlayerIO;
 using DurackServer.networking.Session;
 
@@ -14,6 +13,13 @@ namespace DurackServer.networking
         private SessionManager SessionManager = new();
         public delegate void PutCard(GameSession currentPlayer, Command cmd);
         public event PutCard OnPutCard;
+        private Controller.Controller _controller;
+
+        public Server(Controller.Controller controller)
+        {
+            _controller = controller;
+        }
+        
         
         public void Start()
         {
@@ -52,19 +58,26 @@ namespace DurackServer.networking
                             {
                                 SessionManager.AddPlayerToSession(session, player);
                                 Console.WriteLine($"Connected to Session: {session.Guid}");
+                                player.SendMessageToClient(
+                                new Command{
+                                    Code=CommandCodes.ConnectedToSession
+                                });
                                 return;
                             }
                             session = SessionManager.CreateSession(cmd.Name);
                             SessionManager.AddPlayerToSession(session, player);
                             Console.WriteLine($"Created Session: {session.Guid}");
-                            player.SendMessageToClient($"{session.Guid}");
+                            player.SendMessageToClient(new Command{
+                                Code=CommandCodes.SessionCreated
+                            });
                             break;
                         
-                        case CommandCodes.PutCard:
+                        case CommandCodes.ThrowCards:
                             session = SessionManager.GetFirstSession();
                             if (session is not null)
                             {
                                 OnPutCard?.Invoke(session,cmd);
+                                _controller.StartGameRound(session, cmd);
                             }
                             break;
                     }
