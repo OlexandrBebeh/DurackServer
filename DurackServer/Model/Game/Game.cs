@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+using DurackServer.Exceptions;
 using DurackServer.Model.DataType;
 
 namespace DurackServer.Model.Game
@@ -9,9 +8,9 @@ namespace DurackServer.Model.Game
     public class Game
     {
         private static int CardsInHand = 6;
-        public GameState gameState;
+        public GameState gameState = new ();
         public int playerTurn;
-        
+        public GameState prevGameState;
         public Game()
         {
             gameState.deckType = new DeckType();
@@ -21,13 +20,22 @@ namespace DurackServer.Model.Game
         {
             return gameState.deckType;
         }
+        
+        public void StartTransaction()
+        {
+            prevGameState = gameState;
+        }
+        
+        public void UndoTransaction()
+        {
+            gameState = prevGameState;
+        }
         public Player GetPlayer(int p)
         {
             if (gameState.players.Count > p)
                 return gameState.players[p];
-            
-            //exeption
-            return gameState.players[0];
+
+            throw new GameException("Invalid player");
         }
         public void NextPlayer()
         {
@@ -49,7 +57,7 @@ namespace DurackServer.Model.Game
         {
             if (cards.Count == 0)
             {
-                return;
+                throw new GameException("Not valid amount of cards");
             }
             
             if (gameState.allowedRanks.Count == 0)
@@ -63,7 +71,7 @@ namespace DurackServer.Model.Game
             }
             else
             {
-                //Add exception
+                throw new GameException("Not valid rank");
             }
 
             RemoveCardFromHand(GetCurrentPlayerId(), cards);
@@ -78,8 +86,7 @@ namespace DurackServer.Model.Game
 
             if (cards.Count == gameState.fieldState.FindAll(x => x.beatCard == null).Count)
             {
-                // Exeption
-                return;
+                throw new GameException("Not valid amount of cards");
             }
 
             int i = 0;
@@ -93,7 +100,7 @@ namespace DurackServer.Model.Game
                     }
                     else
                     {
-                        //exception
+                        throw new GameException("Card dont beat");
                     }
                     i++;
                 }
@@ -126,8 +133,7 @@ namespace DurackServer.Model.Game
                 }
                 else
                 {
-                    //exception
-                    return;
+                    throw new GameException("Try to use card not in hand");
                 }
             }
         }
@@ -153,7 +159,7 @@ namespace DurackServer.Model.Game
 
             if (b)
             {
-                //exeption
+                throw new GameException("Try to use card not in hand");
             }
             
             gameState.players[GetCurrentPlayerId()].TakeCards(cards);
