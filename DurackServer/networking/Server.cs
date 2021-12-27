@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using DurackServer.Model.Game;
 using DurackServer.networking.PlayerIO;
 using DurackServer.networking.Session;
 
@@ -11,6 +12,7 @@ namespace DurackServer.networking
     {
         private TcpListener _listener = new(IPAddress.Parse("127.0.0.1"), 8001);
         private SessionManager SessionManager = new();
+        private Game _game;
         public void Start()
         {
             try
@@ -42,20 +44,19 @@ namespace DurackServer.networking
                     var cmd = CommandParser.FromString(message);
                     switch (cmd.Code)
                     {
-                        case CommandCodes.CreateSession:
-                            session = SessionManager.CreateSession(cmd.Name);
-                            SessionManager.AddPlayerToSession(session, player);
-                            Console.WriteLine($"Created Session: {session.Guid}");
-                            player.SendMessageToClient($"{session.Guid}");
-                            break;
-                        
                         case CommandCodes.ConnectToSession:
                             session = SessionManager.GetFirstSession();
                             if (session is not null)
                             {
                                 SessionManager.AddPlayerToSession(session, player);
                                 Console.WriteLine($"Connected to Session: {session.Guid}");
+                                _game = new Game();
+                                return;
                             }
+                            session = SessionManager.CreateSession(cmd.Name);
+                            SessionManager.AddPlayerToSession(session, player);
+                            Console.WriteLine($"Created Session: {session.Guid}");
+                            player.SendMessageToClient($"{session.Guid}");
                             break;
                         
                         case CommandCodes.PutCard:
