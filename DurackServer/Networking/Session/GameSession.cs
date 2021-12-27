@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DurackServer.networking.PlayerIO;
 
 namespace DurackServer.networking.Session
 {
@@ -7,7 +8,7 @@ namespace DurackServer.networking.Session
     {
         public string Name { get; set; }
         public Guid Guid { get; }
-        private List<NetworkPlayer> Players { get; } = new();
+        public List<NetworkPlayer> Players { get; } = new();
         public GameSession(string name)
         {
             Guid = Guid.NewGuid();
@@ -26,6 +27,14 @@ namespace DurackServer.networking.Session
         {
             networkPlayer.GameSession = this;
             Players.Add(networkPlayer);
+        }
+        
+        public void SendCommandToAllPlayers(Command cmd)
+        {
+            foreach (var player in Players)
+            {
+                player.SendMessageToClient(cmd);
+            }
         }
     }
 }

@@ -35,8 +35,23 @@ namespace DurackServer.Controller
 
         public void AddPlayer(Player player)
         {
-            game.gameState.players.Add(player);
+            game.gameState.Players.Add(player);
             game.PostRaund();
+        }
+
+        public int GetNextPlayerId()
+        {
+            return game.GetNextPlayerId();
+        }
+        
+        public int GetCurrentPlayerId()
+        {
+            return game.GetCurrentPlayerId();
+        }
+        
+        public Player GetCurrentPlayer()
+        {
+            return game.GetPlayer(GetCurrentPlayerId());
         }
 
         private void ProcessAction(PlayerAction action, Command cmd)

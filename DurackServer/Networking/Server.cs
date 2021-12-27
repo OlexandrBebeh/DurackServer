@@ -81,6 +81,14 @@ namespace DurackServer.networking
                             {
                                 OnPutCard?.Invoke(session,cmd);
                                 _controller.StartGameRound(session, cmd);
+                                var gameState = _controller.GetGameState();
+                                session.SendCommandToAllPlayers(new Command()
+                                {
+                                    PlayerId = _controller.GetNextPlayerId(),
+                                    BottomCard = gameState.DeckType.GetBotomCard(),
+                                    EnemyPlayerCardsLeft = _controller.GetCurrentPlayer().hand.Count,
+                                    DeckCardsLeft = _controller.GetGameState().DeckType.GetCardsAmount()
+                                });
                             }
                             break;
                     }

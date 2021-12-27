@@ -5,11 +5,10 @@ namespace DurackServer.Model.Game
 {
     public class GameState
     {
-        public DeckType deckType;
-        public List<Player> players = new ();
-        public int current_player = 0;
-        public List<CardCouplet> fieldState = new();
-
-        public HashSet<Rank> allowedRanks = new();
+        public DeckType DeckType { get; set; }
+        public List<Player> Players { get; set; } = new ();
+        public int CurrentPlayer { get; set; } = 0;
+        public List<CardCouplet> FieldState { get; set; } = new();
+        public HashSet<Rank> AllowedRanks { get; set; }= new();
     }
 }
