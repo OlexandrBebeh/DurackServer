@@ -60,7 +60,8 @@ namespace DurackServer.networking
                                 Console.WriteLine($"Connected to Session: {session.Guid}");
                                 player.SendMessageToClient(
                                 new Command{
-                                    Code=CommandCodes.ConnectedToSession
+                                    Code=CommandCodes.ConnectedToSession,
+                                    PlayerId = 1
                                 });
                                 return;
                             }
@@ -68,7 +69,8 @@ namespace DurackServer.networking
                             SessionManager.AddPlayerToSession(session, player);
                             Console.WriteLine($"Created Session: {session.Guid}");
                             player.SendMessageToClient(new Command{
-                                Code=CommandCodes.SessionCreated
+                                Code=CommandCodes.SessionCreated,
+                                PlayerId = 0
                             });
                             break;
                         
@@ -82,13 +84,15 @@ namespace DurackServer.networking
                                 OnPutCard?.Invoke(session,cmd);
                                 _controller.StartGameRound(session, cmd);
                                 var gameState = _controller.GetGameState();
-                                session.SendCommandToAllPlayers(new Command()
+                                session.SendCommandToAllPlayers(new Command
                                 {
                                     PlayerId = _controller.GetNextPlayerId(),
                                     BottomCard = gameState.DeckType.GetBotomCard(),
                                     EnemyPlayerCardsLeft = _controller.GetCurrentPlayer().hand.Count,
                                     DeckCardsLeft = _controller.GetGameState().DeckType.GetCardsAmount(),
-                                    Code = cmd.Code
+                                    Code = cmd.Code,
+                                    Cards = cmd.Cards,
+                                    CardCouplets = gameState.FieldState
                                 });
                             }
                             break;

@@ -84,7 +84,7 @@ namespace DurackServer.Model.Game
                 return;
             }
 
-            if (cards.Count == gameState.FieldState.FindAll(x => x.beatCard == null).Count)
+            if (cards.Count == gameState.FieldState.FindAll(x => x.BeatCard == null).Count)
             {
                 throw new GameException("Not valid amount of cards");
             }
@@ -92,11 +92,11 @@ namespace DurackServer.Model.Game
             int i = 0;
             foreach (var couplet in gameState.FieldState)
             {
-                if (couplet.beatCard != null)
+                if (couplet.BeatCard != null)
                 {
-                    if (gameState.DeckType.TryBeat(couplet.beatCard,cards[i]))
+                    if (gameState.DeckType.TryBeat(couplet.BeatCard,cards[i]))
                     {
-                        couplet.AddBeatCard(cards[i]);
+                        couplet.BeatCard = cards[i];
                     }
                     else
                     {
@@ -119,7 +119,7 @@ namespace DurackServer.Model.Game
             foreach (var card in cards)
             {
                 gameState.AllowedRanks.Add(card.Rank);
-                gameState.FieldState.Add(new CardCouplet(card));
+                gameState.FieldState.Add(new CardCouplet { FirstCard = card });
             }
         }
 
@@ -145,11 +145,11 @@ namespace DurackServer.Model.Game
             
             foreach (var couplet in gameState.FieldState)
             {
-                cards.Add(couplet.firstCard);
+                cards.Add(couplet.FirstCard);
 
-                if (couplet.beatCard != null)
+                if (couplet.BeatCard != null)
                 {
-                    cards.Add(couplet.firstCard);
+                    cards.Add(couplet.FirstCard);
                 }
                 else
                 {
