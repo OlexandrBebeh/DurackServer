@@ -63,6 +63,11 @@ namespace DurackServer.networking
                                     Code=CommandCodes.ConnectedToSession,
                                     PlayerId = 1
                                 });
+                                Thread.Sleep(50);
+                                session.Players[0].SendMessageToClient(new Command
+                                {
+                                    Code = CommandCodes.YouTurn,
+                                });
                                 return;
                             }
                             session = SessionManager.CreateSession(cmd.Name);
