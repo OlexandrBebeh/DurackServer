@@ -87,7 +87,8 @@ namespace DurackServer.networking
                                     PlayerId = _controller.GetNextPlayerId(),
                                     BottomCard = gameState.DeckType.GetBotomCard(),
                                     EnemyPlayerCardsLeft = _controller.GetCurrentPlayer().hand.Count,
-                                    DeckCardsLeft = _controller.GetGameState().DeckType.GetCardsAmount()
+                                    DeckCardsLeft = _controller.GetGameState().DeckType.GetCardsAmount(),
+                                    Code = cmd.Code
                                 });
                             }
                             break;
