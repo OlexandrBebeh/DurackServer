@@ -9,5 +9,6 @@
         public const string TakeCards = "TakeCards";
         public const string BeatCards = "BeatCards";
         public const string Pass = "Pass";
+        public const string YouTurn = "YouTurn";
     }
 }

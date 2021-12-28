@@ -94,6 +94,13 @@ namespace DurackServer.networking
                                     Cards = _controller.GetNextPlayer().hand,
                                     CardCouplets = gameState.FieldState
                                 });
+                                Thread.Sleep(50);
+                                session.Players[_controller.GetCurrentPlayerId()]
+                                    .SendMessageToClient(new Command
+                                    {
+                                        Code = CommandCodes.YouTurn,
+                                        PlayerId = _controller.GetCurrentPlayerId()
+                                    });
                             }
                             break;
                     }
