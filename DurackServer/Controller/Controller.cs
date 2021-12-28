@@ -53,6 +53,11 @@ namespace DurackServer.Controller
         {
             return game.GetPlayer(GetCurrentPlayerId());
         }
+        
+        public Player GetNextPlayer()
+        {
+            return game.GetPlayer(GetNextPlayerId());
+        }
 
         private void ProcessAction(PlayerAction action, Command cmd)
         {

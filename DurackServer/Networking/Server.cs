@@ -91,7 +91,7 @@ namespace DurackServer.networking
                                     EnemyPlayerCardsLeft = _controller.GetCurrentPlayer().hand.Count,
                                     DeckCardsLeft = _controller.GetGameState().DeckType.GetCardsAmount(),
                                     Code = cmd.Code,
-                                    Cards = cmd.Cards,
+                                    Cards = _controller.GetNextPlayer().hand,
                                     CardCouplets = gameState.FieldState
                                 });
                             }
