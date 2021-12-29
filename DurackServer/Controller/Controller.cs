@@ -24,7 +24,7 @@ namespace DurackServer.Controller
             catch (GameException e)
             {
                 game.UndoTransaction();
-                throw new GameException("make another move -_-");
+                throw new GameException($"make another move -_-: {e}");
             }
 
             if (game.CheckWin() > -1)
@@ -36,7 +36,7 @@ namespace DurackServer.Controller
         public void AddPlayer(Player player)
         {
             game.gameState.Players.Add(player);
-            game.PostRaund();
+            game.PostRound();
         }
 
         public int GetNextPlayerId()
@@ -64,14 +64,13 @@ namespace DurackServer.Controller
             if (action == PlayerAction.Pass)
             {
                 game.Pass();
-                game.PostRaund();
+                game.PostRound();
                 game.NextPlayer();
             }
             else if (action == PlayerAction.TakeCards)
             {
-                game.NextPlayer();
                 game.TakeCards();
-                game.PostRaund();
+                game.PostRound();
                 game.NextPlayer();
             }
             else if (action == PlayerAction.ThrowCards)

@@ -40,12 +40,12 @@ namespace DurackServer.Model.Game
         public void NextPlayer()
         {
             gameState.CurrentPlayer += 1;
-            gameState.CurrentPlayer = gameState.CurrentPlayer % gameState.Players.Capacity;
+            gameState.CurrentPlayer %= gameState.Players.Count;
         }
         
         public int GetNextPlayerId()
         {
-            return (gameState.CurrentPlayer + 1) % gameState.Players.Capacity;
+            return (gameState.CurrentPlayer + 1) % gameState.Players.Count;
         }
         
         public int GetCurrentPlayerId()
@@ -84,7 +84,7 @@ namespace DurackServer.Model.Game
                 return;
             }
 
-            if (cards.Count == gameState.FieldState.FindAll(x => x.BeatCard == null).Count)
+            if (cards.Count != gameState.FieldState.FindAll(x => x.BeatCard == null).Count)
             {
                 throw new GameException("Not valid amount of cards");
             }
@@ -92,11 +92,12 @@ namespace DurackServer.Model.Game
             int i = 0;
             foreach (var couplet in gameState.FieldState)
             {
-                if (couplet.BeatCard != null)
+                if (couplet.BeatCard == null)
                 {
-                    if (gameState.DeckType.TryBeat(couplet.BeatCard,cards[i]))
+                    if (gameState.DeckType.TryBeat(couplet.FirstCard,cards[i]))
                     {
                         couplet.BeatCard = cards[i];
+                        gameState.AllowedRanks.Add(cards[i].Rank);
                     }
                     else
                     {
@@ -106,7 +107,7 @@ namespace DurackServer.Model.Game
                 }
             }
             
-            RemoveCardFromHand(GetNextPlayerId(), cards);
+            RemoveCardFromHand(GetCurrentPlayerId(), cards);
         }
 
         public void Pass()
@@ -149,13 +150,15 @@ namespace DurackServer.Model.Game
 
                 if (couplet.BeatCard != null)
                 {
-                    cards.Add(couplet.FirstCard);
+                    cards.Add(couplet.BeatCard);
                 }
                 else
                 {
                     b = false;
                 }
             }
+            
+            gameState.FieldState.Clear();
 
             if (b)
             {
@@ -165,8 +168,9 @@ namespace DurackServer.Model.Game
             gameState.Players[GetCurrentPlayerId()].TakeCards(cards);
         }
 
-        public void PostRaund()
+        public void PostRound()
         {
+            gameState.AllowedRanks.Clear();
             for (int i = 0; i < gameState.Players.Count && gameState.DeckType.GetCardsAmount() > 0; i++)
             {
                 var cardAmount = Math.Min(
